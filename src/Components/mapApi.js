@@ -8,6 +8,13 @@ const MapApi = () => {
     width: window.innerWidth,
     height: window.innerHeight
   })
+  const [search, setSearch] = useState('');
+
+  const onChangeSearch = (e) => {
+    if (e.key === 'Enter') {
+      setSearch(e.target.value);
+    }
+  }
 
   const sizeHandler = () => {
     setWindowSize({
@@ -64,7 +71,7 @@ const MapApi = () => {
     }
 
     // 키워드로 장소를 검색합니다
-    ps.keywordSearch('이태원 맛집', placesSearchCB);
+    ps.keywordSearch(search, placesSearchCB);
 
     // 지도에 마커를 표시하는 함수입니다
     const displayMarker = (place) => {
@@ -82,7 +89,7 @@ const MapApi = () => {
         infowindow.open(map, marker);
       });
     }
-  }, [])
+  }, [windowSize.width, windowSize.height, search])
 
   useEffect(() => {
     window.addEventListener('resize', sizeHandler);
@@ -94,7 +101,11 @@ const MapApi = () => {
   return (
     <>
       <div className="map_wrap" style={{ width: windowSize.width, height: windowSize.height }}>
-        <div id="kakaoMap" style={{ width: "100%", height: "100%" }}></div>
+        <div id="kakaoMap" style={{ width: "100%", height: "100%" }}>
+          <div style={{ position: 'absolute', top: '5px', left: '10px', zIndex: '2' }}>
+            <input style={{ width: '160px', height: '17px', padding: '9px 12px 10px' }} onKeyPress={onChangeSearch} />
+          </div>
+        </div>
       </div>
     </>
   )
